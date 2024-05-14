@@ -1,27 +1,45 @@
-import sqlite3
+from flask import Flask
+from flask import render_template
+from flask import request
+import users
+app = Flask(__name__)
 
-class User:
-    def __init__(self, username, firstname, lastname):
-        self.username = username
-        self.firstname = firstname
-        self.lastname = lastname
+@app.route("/") #oder dein dein eigener Pfad
+def einStein():  # beliebiger Funktionsname
+    return "einStein" # Der Text der unter der Route angezeigt wird.
 
-    def to_db(self):
-        connection = sqlite3.connect("database.db") # Muss vorher angelegt werden.
-        cursor = connection.cursor()
-        sql = f"INSERT INTO users(username, firstname, lastname) VALUES ('{self.username}', '{self.firstname}', '{self.lastname}')"
-        cursor.execute(sql)
-        connection.commit()
-        connection.close()
+@app.route("/hello/<string:username>")
+def hello_user(username):
+    user = users.from_db(username)
+    return f"<html><head></head><body>Hello <b>{user.username} </b></body></html>"
 
-    @classmethod
-    def from_db(cls, username):
-        connection = sqlite3.connect("database.db") # Muss vorher angelegt werden.
-        cursor = connection.cursor()
-        sql = f"SELECT username FROM users WHERE username = {username}"
-        cursor.execute(sql)
-        row = cursor.fetchone()
-        connection.close()
-        return User(row[0], row[1], row[2])
+@app.route("/hello_flask")
+def hello_flask():
+    return render_template(
+        "template.html",
+        title="Hello Flask",
+        description="This is my last one!")
+@app.route("/hello_flask2")
+def hello_flask2():
+    return render_template(
+        "template.html",
+        title="Hello Flask2",
+        description="This is my second-last one!")
 
-user = User.from_db("asbl")
+@app.route("/add_user", methods=["GET", "POST"])
+def user_form():
+     if request.method == "GET":
+        return '''
+                  <form method="POST">
+                      <div><label>Username: <input type="text" name="username"></label></div>
+                      <div><label>Firstname: <input type="text" name="firstname"></label></div>
+                      <div><label>Lastname: <input type="text" name="lastname"></label></div>
+                      <input type="submit" value="Submit">
+                  </form>'''
+     else:
+        username = request.form.get("username")
+        firstname = request.form.get("firstname")
+        lastname = request.form.get("lastname")
+        user = users.User(username, firstname, lastname)
+        user.to_db()
+        return f"User {username} was created"
