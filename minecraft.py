@@ -1,7 +1,7 @@
 import sqlite3
 
 class User:
-    def __init__(self, username, firstname, lastname):
+    def __init__(self, Name, Dimension, Höhe mit höchster Wahrscheinlichkeit, Biom, Farbe, real life, Bild):
         self.username = username
         self.firstname = firstname
         self.lastname = lastname
@@ -9,7 +9,7 @@ class User:
     def to_db(self):
         connection = sqlite3.connect("ding_bis_jetzt.db") # Muss vorher angelegt werden.
         cursor = connection.cursor()
-        sql = f"INSERT INTO users(username, firstname, lastname) VALUES ('{self.username}', '{self.firstname}', '{self.lastname}')"
+        sql = f"INSERT INTO users (username, firstname, lastname) VALUES ('{self.username}', '{self.firstname}', '{self.lastname}')"
         cursor.execute(sql)
         connection.commit()
         connection.close()
@@ -24,6 +24,3 @@ class User:
         row = cursor.fetchone()
         connection.close()
         return User(row[0], row[1], row[2])
-
-
-
