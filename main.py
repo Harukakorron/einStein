@@ -2,6 +2,7 @@ from flask import Flask
 from flask import render_template
 from flask import request
 import users
+import minecraft
 app = Flask(__name__)
 
 @app.route("/") #oder dein dein eigener Pfad
@@ -19,6 +20,7 @@ def hello_flask():
         "template.html",
         title="Hello Flask",
         description="This is my last one!")
+
 @app.route("/hello_flask2")
 def hello_flask2():
     return render_template(
@@ -43,3 +45,29 @@ def user_form():
         user = users.User(username, firstname, lastname)
         user.to_db()
         return f"User {username} was created"
+    
+@app.route("/add_minecraft", methods=["GET", "POST"])
+def minecraft_form():
+     if request.method == "GET":
+        return '''
+                  <form method="POST">
+                      <div><label>Name: <input type="text" name="Name"></label></div>
+                      <div><label>Dimension: <input type="text" name="Dimension"></label></div>
+                      <div><label>Höhe_mit_höchster_Wahrscheinlichkeit: <input type="text" name="Höhe mit höchster Wahrscheinlichkeit"></label></div>
+                      <div><label>Biom: <input type="text" name="Biom"></label></div>
+                      <div><label>Farbe: <input type="text" name="Farbe"></label></div>
+                      <div><label>real_life: <input type="text" name="real life"></label></div>
+                      <div><label>Bild: <input type="text" name="Bild"></label></div>
+                      <input type="submit" value="Submit">
+                  </form>'''
+     else:
+        Name = request.form.get("Name")
+        Dimension = request.form.get("Dimension")
+        Höhe_mit_höchster_Wahrscheinlichkeit = request.form.get("Höhe mit höchster Wahrscheinlichkeit")
+        Biom = request.form.get("Biom")
+        Farbe = request.form.get("Farbe")
+        real_life = request.form.get("real life")
+        Bild = request.form.get("Bild")
+        Mine = minecraft.Mine(Name, Dimension, Höhe_mit_höchster_Wahrscheinlichkeit, Biom, Farbe, real_life, Bild)
+        Mine.to_db()
+        return f" minecraft {Name} was created"    
