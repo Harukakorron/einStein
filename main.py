@@ -3,6 +3,7 @@ from flask import render_template
 from flask import request
 import users
 import minecraft
+import stones
 app = Flask(__name__)
 
 @app.route("/") #oder dein dein eigener Pfad
@@ -46,6 +47,38 @@ def user_form():
         user.to_db()
         return f"User {username} was created"
     
+@app.route("/add_stones", methods=["GET", "POST"])
+def minecraft_form():
+     if request.method == "GET":
+        return '''
+                  <form method="POST">
+                      <div><label>Name: <input type="text" name="Name"></label></div>
+                      <div><label>Formeleinheit: <input type="text" name="Formeleinheit"></label></div>
+                      <div><label>Verwendung: <input type="text" name="Verwendung"></label></div>
+                      <div><label>Härte: <input type="text" name="Härte"></label></div>
+                      <div><label>Farbe: <input type="text" name="Farbe"></label></div>
+                      <div><label>Zugehörigkeit: <input type="text" name="Zugehörigkeit"></label></div>
+                      <div><label>Gefahr: <input type="text" name="Gefahr"></label></div>
+                      <div><label>Nummer: <input type="text" name="Nummer"></label></div>
+                      <div><label>Oberklasse: <input type="text" name="Oberklasse"></label></div>
+                      <div><label>Bild: <input type="text" name="Bild"></label></div>
+                      <input type="submit" value="Submit">
+                  </form>'''
+     else:
+        Name = request.form.get("Name")
+        Formeleinheit = request.form.get("Formeleinheit")
+        Verwendung = request.form.get("Verwendung")
+        Härte = request.form.get("Härte")
+        Farbe = request.form.get("Farbe")
+        Zugehörigkeit = request.form.get("Zugehörigkeit")
+        Gefahr = request.form.get("Gefahr")
+        Nummer = request.form.get("Nummer")
+        Oberklasse = request.form.get("Oberklasse")
+        Bild = request.form.get("Bild")
+        Mine = minecraft.Mine(Name, Formeleinheit, Verwendung, Härte, Farbe, Zugehörigkeit, Gefahr, Nummer, Oberklasse, Bild)
+        Mine.to_db()
+        return f" stone {Name} was created"
+
 @app.route("/add_minecraft", methods=["GET", "POST"])
 def minecraft_form():
      if request.method == "GET":
@@ -69,5 +102,5 @@ def minecraft_form():
         real_life = request.form.get("real life")
         Bild = request.form.get("Bild")
         Mine = minecraft.Mine(Name, Dimension, Höhe_mit_höchster_Wahrscheinlichkeit, Biom, Farbe, real_life, Bild)
-        Mine.to_db()
-        return f" minecraft {Name} was created"    
+        mine.to_db()
+        return f" minecraft {Name} was created"  
