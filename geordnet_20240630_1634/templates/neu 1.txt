@@ -1,0 +1,17 @@
+	<h1><a href="{{ url_for('einstein') }}">einStein</a></h1>
+<hl><a href ="{{ url_for('ortetabelle.html') }}">Orte</a></hl>
+<hl><a href ="{{ url_for('steinetabelle.html') }}">Steine</a></hl>
+hl><a href ="{{ url_for('deutschlandtabelle.html') }}">Deutschland</a></hl>
+<hl><a href ="{{ url_for('minetab.html') }}">Minecraft</a></hl>
+<!--
+<nav class="topnav">
+	<hl><a href ="{{ url_for('einstein.html') }}">einStein</a></hl>
+	<ul>
+		<li><a href ="{{ url_for('steinetabelle.html') }}"> Steine</a></li>
+		<li><a href ="{{ url_for('ortetabelle.html') }}"> Orte</a></li>
+		<li><a href ="{{ url_for('deutschlandtabelle.html') }}"> Deutschland</a></li>
+		<li><a href ="{{ url_for('minetab.html') }}"> Minecraft</a></li>
+	</ul>
+</nav>
+-->
+<li style="float:right"><a class="active" href="einstein.html">Startseite</a></li>

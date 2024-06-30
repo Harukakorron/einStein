@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/einstein.css') }}" />
+</head>
+<body>
+
+<div class="header">
+  	<div><h1>einStein</h1>
+		<p>Die wunderbare Welt der Steine</p></div>
+</div>
+
+<nav class="topnav">
+	<h1><a href="{{ url_for('einStein') }}">Startseite</a></h1>
+	<ul>
+		<li><a href ="{{ url_for('steinetabelle') }}"> Steine</a></li>
+		<li><a href ="{{ url_for('ortetabelle') }}"> Orte</a></li>
+		<li><a href ="{{ url_for('deutschlandtabelle') }}"> Deutschland</a></li>
+		<li><a href ="{{ url_for('minetab') }}"> minecraft</a></li>
+	</ul>
+</nav>
+<div class="row">
+  	<div class="leftcolumn">
+    		<div class="card">
+      		<h2>Steine in Deutschland!!!!</h2>
+    	</div>
+	</div>
+    <div class="rightcolumn">
+    	    <div class="card">
+      		<h2>About Us</h2>
+      		<img src="static/img/ein33Stein.jpg" alt="Herzsteinchen" width="300" height="150" class="rounded-img">
+      		<p>Halloooooo!!!</p>
+      		<p>Wir sind Solvej, Lasse und Noémi und wir haben diese Website über Steine erstellt!</p>
+    	</div>
+    	<div class="card">
+     	 	<h3>Noch mehr Steine!!!!!!!!!!</h3>
+    	</div>
+    	<div class="card">
+      		<h3>Rock n' Roll</h3>
+      		<p>Abonniert die Steine-Datenbank!</p>
+			  <form action="/add_user" method="post">
+            <label for="username">Benutzername:</label><br>
+            <input type="text" id="username" name="username" required><br>
+            <label for="firstname">Vorname:</label><br>
+            <input type="text" id="firstname" name="firstname" required><br>
+            <label for="lastname">Nachname:</label><br>
+            <input type="text" id="lastname" name="lastname" required><br>
+            <button type="submit">Abonnieren</button>
+        </form>
+    	</div>
+  	</div>
+</div>
+<div class="footer">
+  <h2>Dies ist nur ein Informatik-Projek, pls don't hate us...</h2>
+</div>
+</body>
+</html>
