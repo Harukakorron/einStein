@@ -1,0 +1,23 @@
+<html>
+<html xmlns:width="http://www.w3.org/1999/xhtml">
+<head>
+	<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/einstein.css') }}" >
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+	<body>
+<table class="table">
+	<tr class="table_header">
+		{% for header in headings %}
+		<th class="table_cell">{{ header }}</th>
+		{% endfor %}
+	</tr>
+		{% for row in stonedata %}
+		<tr class="table_row">
+			{% for cell in row %}
+				<td class="table_cell">{{ cell }}</td>
+			{% endfor %}
+		</tr>
+	{% endfor %}
+</table>
+	</body>
+</html>	 

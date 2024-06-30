@@ -13,7 +13,7 @@ body {
   padding: 30px;
   text-align: center;
   background: white;
-  background-image: url("/static/img/head.jpg");
+  background-image: url('000000.jpg');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -104,22 +104,3 @@ body {
     width: 100%;
   }
 }
-
-body {
-	background-color:dark grey;
-}			
-.table {
-	border-spacing: 0;
-	margin: 1rem;
-	background-color #f5f5f5;
-}
-.table_row:nth-child(even) {
-	bachground-color: #e5e5e5;
-}
-.table_header {
-	text-algin: left;
-}
-.table_cell {
-	padding: 8px;
-}
-			

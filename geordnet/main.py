@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request
+import sqlite3
 import users
 import minecraft
 import stones
@@ -15,19 +16,19 @@ def hello_user(username):
     user = users.from_db(username)
     return f"<html><head></head><body>Hello <b>{user.username} </b></body></html>"
 
-@app.route("/hello_flask")
-def hello_flask():
-    return render_template(
-        "template.html",
-        title="Hello Flask",
-        description="This is my last one!")
-
-@app.route("/hello_flask2")
-def hello_flask2():
-    return render_template(
-        "template.html",
-        title="Hello Flask2",
-        description="This is my second-last one!")
+##@app.route("/hello_flask")
+##def hello_flask():
+##    return render_template(
+##        "template.html",
+##        title="Hello Flask",
+##        description="This is my last one!")
+##
+##@app.route("/hello_flask2")
+##def hello_flask2():
+##    return render_template(
+##        "template.html",
+##        title="Hello Flask2",
+##        description="This is my second-last one!")
 
 @app.route("/add_user", methods=["GET", "POST"])
 def user_form():
@@ -161,6 +162,128 @@ def ortle_form():
 def home():
    return render_template('einstein.html')
 
+@app.route('/steinetabelle')
+def steinetabelle():
+    mycursor = app.dbcursor
+    headings= ("Name", "Farbe", "Oberklasse", "Zugehörigkeit", "Verwendung", "Gefahr", "Härte", "Formeleinheit", "Bild")
+    stonedata = mycursor.execute("Select Name, Farbe, Oberklasse, Zugehörigkeit, Verwendung, Gefahr, Härte, Formeleinheit, Bild from Steine;")
+    stonedata = tuple(map(lambda x: ((x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7]), x[8], x[0]), stonedata))
+##    stonedata = tuple(filter(lambda x: x[0].find(mytext) >= 0))
+    searchString = str(request.args.get('searchString'))
+    if searchString != 'None' and len(searchString.strip()) > 0:
+        stonedata = filter(lambda x: (x[0][0] != None and x[0][0].find(searchString) >= 0) or \
+                           (x[0][1] != None and x[0][1].find(searchString) >= 0) or \
+                           (x[0][2] != None and x[0][2].find(searchString) >= 0) or \
+                           (x[0][3] != None and x[0][3].find(searchString) >= 0) or \
+                           (x[0][4] != None and x[0][4].find(searchString) >= 0) or \
+                           (x[0][5] != None and x[0][5].find(searchString) >= 0) or \
+                           (x[0][7] != None and x[0][7].find(searchString) >= 0),
+                                 stonedata)
+    else:
+        searchString = '*'
+    stonedata = tuple(stonedata)
+    return render_template('steinetabelle.html',
+                           headings=headings,
+                           stonedata=stonedata,
+                           searchString=searchString,
+                           foundsets=len(stonedata))
+##    x[0].find(mytext) >= 0
+
+@app.route('/ortetabelle')
+def ortetabelle():
+    mycursor = app.dbcursor
+    headings= ("Land", "Stein", "Abbaumethode")
+    stonedata = tuple(mycursor.execute("Select Land, Stein, Abbaumethode from Orte;"))
+##    stonedata = tuple(map(lambda x: x[0], x[1], x[2] stonedata)
+##    stonedata = tuple(filter(lambda x: x.find(mytext) >= 0))
+    searchString = str(request.args.get('searchString'))
+    if searchString != 'None' and len(searchString.strip()) > 0:
+        stonedata = filter(lambda x: (x[0] != None and x[0].find(searchString) >= 0) or \
+                           (x[1] != None and x[1].find(searchString) >= 0) or \
+                           (x[2] != None and x[2].find(searchString) >= 0),
+                                 stonedata)
+    else:
+        searchString = '*'
+    stonedata = tuple(stonedata)
+    return render_template('ortetabelle.html',
+                           headings=headings,
+                           stonedata=stonedata,
+                           searchString=searchString,
+                           foundsets=len(stonedata))
+
+@app.route('/deutschlandtabelle')
+def deutschlandtabelle():
+    mycursor = app.dbcursor
+    headings= ("Land", "Bundesland", "Stein", "Abbaumethode")
+    stonedata = list(mycursor.execute("Select Land, Bundesland, Stein, Abbaumethode from Deutschland;"))
+    searchString = str(request.args.get('searchString'))
+    if searchString != 'None' and len(searchString.strip()) > 0:
+        stonedata = filter(lambda x: (x[0] != None and x[0].find(searchString) >= 0) or \
+                           (x[1] != None and x[1].find(searchString) >= 0) or \
+                           (x[2] != None and x[2].find(searchString) >= 0) or \
+                           (x[3] != None and x[3].find(searchString) >= 0),
+                                 stonedata)
+    else:
+        searchString = '*'
+    stonedata = tuple(stonedata)
+    return render_template('deutschlandtabelle.html',
+                           headings=headings,
+                           stonedata=stonedata,
+                           searchString=searchString,
+                           foundsets=len(stonedata))
+        
+@app.route('/minetab')
+def minetab():
+    mycursor = app.dbcursor
+    stonedata = mycursor.execute("Select * from Minecraft;")
+    stonedata = tuple(map(lambda x: ((x[0],x[1],x[2],x[3],x[4],x[5]), x[6], x[0]), stonedata))
+
+    headings= ("Name", "Dimension", "Höhe_mit_höchster_Wahrscheinlichkeit", "Biom", "Farbe", "real_life", "Bild")
+
+    searchString = str(request.args.get('searchString'))
+    if searchString != 'None' and len(searchString.strip()) > 0:
+        stonedata = filter(lambda x: (x[0][0] != None and x[0][0].find(searchString) >= 0) or \
+                           (x[0][1] != None and x[0][1].find(searchString) >= 0) or \
+                           (x[0][2] != None and x[0][2].find(searchString) >= 0) or \
+                           (x[0][3] != None and x[0][3].find(searchString) >= 0) or \
+                           (x[0][4] != None and x[0][4].find(searchString) >= 0) or \
+                           (x[0][5] != None and x[0][5].find(searchString) >= 0),
+                                 stonedata)
+    else:
+        searchString = '*'
+    stonedata = tuple(stonedata)
+
+    return render_template('minetab.html',
+                           headings=headings,
+                           stonedata=stonedata,
+                           searchString=searchString,
+                           foundsets=len(stonedata))
+
+@app.route('/einStein')
+def einStein():
+    return render_template('einstein.html')
+
+##@app.route('/table')
+##def table():
+##    mycursor = app.dbcursor
+####    stonedata = mycursor.execute("Select * from Minecraft;")
+####    headings= ("Name", "Dimension", "Höhe_mit_höchster_Wahrscheinlichkeit", "Biom", "Farbe", "real_life", "Bild")
+##    headings = ('a', 'b','c')
+##    stonedata = (('1', '1', '1'),
+##                ('ujg', 'g', 'zugf'),
+##                ('UZGT', 'zf', 'g'),
+##                )
+##    
+##    return render_template('table.html',
+##                            headings=headings,
+##                            stonedata=stonedata)
+##
+
+
 if __name__ == '__main__':
-##    app.debug = True
+    app.debug = False
+    
+    app.dbconnection = sqlite3.connect("ding_bis_jetzt.db",  check_same_thread=False) # Muss vorher angelegt werden.
+    app.dbcursor = app.dbconnection.cursor()
+
     app.run()
